@@ -1,6 +1,8 @@
 # overscroll
 JavaScript functions for listening to `overscroll` events on touch devices.
 
+[Example](https://namannehra.github.io/overscroll/)
+
 `overscroll.js` is the original file and uses `const`, `let` and `arrow functions` which may not be supported in all browsers. `overscroll-transformed.js` is genetared using [babeljs](https://babeljs.io/) and will work in most browsers.
 
 Load the file using script tag in head

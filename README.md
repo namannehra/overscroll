@@ -3,8 +3,6 @@ JavaScript functions for listening to `overscroll` events on touch devices.
 
 [Example](https://namannehra.github.io/overscroll/)
 
-`overscroll.js` is the original file and uses `const`, `let` and `arrow functions` which may not be supported in all browsers. `overscroll-transformed.js` is genetared using [babeljs](https://babeljs.io/) and will work in most browsers.
-
 Load the file using script tag in head
 
 	<script src="overscroll-transformed.js"></script>
@@ -27,3 +25,5 @@ Call `stopOverscrollEvent` when you don't need the element to fire overscroll ev
 	stopOverscrollEvent(d);
 
 **Note:** Height and width of element is calculate when `getOverscrollEvent` is called. If size of element changes after that then simply call `getOverscrollEvent` again with same element as argumant.
+
+`overscroll.js` is the original file and uses `const`, `let` and `arrow functions` which may not be supported in all browsers. `overscroll-transformed.js` is genetared using [babeljs](https://babeljs.io/) and will work in most browsers.

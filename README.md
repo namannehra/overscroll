@@ -1,11 +1,11 @@
 # overscroll
-JavaScript functions for listening to `overscroll` events
+JavaScript functions for listening to `overscroll` events on touch devices.
 
-`overflow.js` is the original file and uses `const`, `let` and `arrow functions` which may not be supported in all browsers. `overflow-transformed.js` is genetared using [babeljs](https://babeljs.io/) and will work in most browsers.
+`overscroll.js` is the original file and uses `const`, `let` and `arrow functions` which may not be supported in all browsers. `overscroll-transformed.js` is genetared using [babeljs](https://babeljs.io/) and will work in most browsers.
 
 Load the file using script tag in head
 
-	<script src="overflow-transformed.js"></script>
+	<script src="overscroll-transformed.js"></script>
 
 Call `getOverscrollEvent` and pass an element as argumenmt
 
@@ -17,7 +17,7 @@ Now this element will fire overscroll events. Listen using addEventListener. The
 	d.addEventListener(`overscroll`, function(e) {
 		var det = e.detail;
 		var top = det.top;
-		console.log('overflow top is ', top);
+		console.log('overscroll top is ', top);
 	});
 
 Call `stopOverscrollEvent` when you don't need the element to fire overscroll events

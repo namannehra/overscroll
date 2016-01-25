@@ -1,0 +1,95 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>overscroll Example</title>
+<script src="overscroll-transformed.js"></script>
+<style>
+	html, body {
+		height: 100%;
+	}
+	body {
+		margin: 0;
+		overflow: auto;
+	}
+	#d {
+		height: 100%;
+		overflow: auto;
+	}
+	#top, #bottom {
+		background-color: red;
+		height: 48px;
+		width: 48px;
+		margin: auto;
+		position: fixed;
+		right: 0;
+		left: 0;
+	}
+	#top {
+		top: -48px;
+	}
+	#bottom {
+		bottom: -48px;
+	}
+</style>
+<div id="top"></div>
+<div id="bottom"></div>
+<div id="d">
+	<p>A very simple example</p>
+	<p>Try to scroll up using touch</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Try to scroll down using touch</p>
+</div>
+<script>
+	var d = document.querySelector('#d'),
+			eleTop = document.querySelector('#top'),
+			eleBottom = document.querySelector('#bottom');
+	getOverscrollEvent(d);
+	d.addEventListener('overscroll', function(e) {
+		var det = e.detail,
+				top = det.top,
+				bottom = det.bottom;
+		eleTop.style.transform = 'translateY(' + Math.min(top / 3, 128) + 'px)';
+		eleBottom.style.transform = 'translateY(-' + Math.min(bottom / 3, 128) + 'px)';
+		if (top > 0 || bottom > 0) {
+			det.touchmoveEvent.preventDefault();
+		}
+	});
+</script>

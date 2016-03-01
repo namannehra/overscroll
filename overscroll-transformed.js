@@ -1,101 +1,81 @@
 'use strict';
-var getOverscrollEvent = function getOverscrollEvent(e) {
-	getOverscrollEvent._init(e);
-};
-var stopOverscrollEvent = function stopOverscrollEvent(e) {
-	stopOverscrollEvent._init(e);
-};
+
 (function () {
-	var x = getOverscrollEvent,
-			y = stopOverscrollEvent,
-			des = '\'getOverscrollEvent\' properties for element',
-			sym = 'Symbol' in window ? Symbol(des) : des;
-	var check = function check(e) {
-		if (!e || e.nodeType !== 1) {
-			throw new TypeError('Failed to execute \'getOverscrollEvent\' with \'' + e + '\': nodeType of parameter 1 is not \'1\'');
-		}
+	'use strict';
+
+	if ('getOverscrollEvent' in window) return;
+	var des = 'overscrollEventProperties',
+	    sym = 'Symbol' in window ? Symbol(des) : '_' + des;
+	var positiveOnly = function positiveOnly(e) {
+		return Math.max(e, 0);
 	};
-	var checkEnd = function checkEnd(e) {
+	var check = function check(e, f) {
+		if (!e || e.nodeType !== 1) throw new TypeError('Failed to execute \'' + f + '\' with \'' + e + '\': parameter 1 should be a node with nodeType equal to 1');
+	};
+	var update = function update(e) {
 		var s = e[sym];
-		s.atTop = e.scrollTop === 0;
-		s.atLeft = e.scrollLeft === 0;
-		s.atBottom = e.scrollTop + s.clientHeight === s.scrollHeight;
-		s.atRight = e.scrollLeft + s.clientWidth === s.scrollWidth;
+		s.height = e.clientHeight;
+		s.width = e.clientWidth;
+		s.scrollHeight = e.scrollHeight;
+		s.scrollWidth = e.scrollWidth;
 	};
-	var scroll = function scroll(e) {
-		var _this = this;
+	var touchstart = function touchstart(e) {
 		var s = this[sym];
-		if (s.chill) {
-			return;
-		}
-		s.chill = true;
-		requestAnimationFrame(function () {
-			checkEnd(_this);
-			s.chill = false;
-		});
+		s.startX = undefined;
+		s.startY = undefined;
+		update(this);
 	};
 	var touchmove = function touchmove(e) {
 		var s = this[sym],
-				touch = e.touches[0];
+		    t = e.touches[0],
+		    scrollTop = this.scrollTop,
+		    scrollLeft = this.scrollLeft,
+		    atTop = scrollTop === 0,
+		    atBottom = scrollTop + s.height === s.scrollHeight,
+		    atLeft = scrollLeft === 0,
+		    atRight = scrollLeft + s.width === s.scrollWidth;
+		var top = 0,
+		    right = 0,
+		    bottom = 0,
+		    left = 0;
+		if (atTop || atBottom) {
+			var y = t.clientY;
+			if (s.startY === undefined) s.startY = y;else {
+				if (atTop) top = positiveOnly(y - s.startY);
+				if (atBottom) bottom = positiveOnly(s.startY - y);
+			}
+		} else if (s.startY !== undefined) s.startY = undefined;
+		if (atLeft || atRight) {
+			var x = t.clientX;
+			if (s.startX === undefined) s.startX = x;else {
+				if (atLeft) left = positiveOnly(x - s.startX);
+				if (atRight) right = positiveOnly(s.startX - x);
+			}
+		} else if (s.startX !== undefined) s.startX = undefined;
 		this.dispatchEvent(new CustomEvent('overscroll', {
 			detail: {
-				top: calcOverscroll('top', s, touch, 'y'),
-				right: calcOverscroll('right', s, touch, 'x', true),
-				bottom: calcOverscroll('bottom', s, touch, 'y', true),
-				left: calcOverscroll('left', s, touch, 'x'),
-				touchmoveEvent: e
+				top: top, right: right, bottom: bottom, left: left,
+				sourceEvent: e
 			}
 		}));
 	};
-	var touchend = function touchend(e) {
-		var s = this[sym];
-		s.overscrollStartTop = undefined;
-		s.overscrollStartRight = undefined;
-		s.overscrollStartLeft = undefined;
-		s.overscrollStartBottom = undefined;
-	};
-	var calcOverscroll = function calcOverscroll(pos, s, touch, dir, rev) {
-		var toReturn = 0;
-		pos = pos.charAt(0).toUpperCase() + pos.slice(1);
-		touch = touch['client' + dir.toUpperCase()];
-		if (s['at' + pos]) {
-			if (s['overscrollStart' + pos] === undefined) {
-				s['overscrollStart' + pos] = touch;
-			} else {
-				toReturn = touch - s['overscrollStart' + pos];
-				if (rev) {
-					toReturn *= -1;
-				}
-				toReturn = Math.max(toReturn, 0);
-			}
-		} else {
-			if (s['overscrollStart' + pos] !== undefined) {
-				s['overscrollStart' + pos] = undefined;
-			}
-		}
-		return toReturn;
-	};
-	x._init = function (e) {
-		check(e);
-		var s = e[sym];
-		if (!s) {
-			s = {};
-			e[sym] = s;
-			e.addEventListener('scroll', scroll);
+	window.getOverscrollEvent = function (e) {
+		check(e, 'getOverscrollEvent');
+		if (!e[sym]) {
+			e[sym] = {};
+			e.addEventListener('touchstart', touchstart);
 			e.addEventListener('touchmove', touchmove);
-			e.addEventListener('touchend', touchend);
 		}
-		s.clientHeight = e.clientHeight;
-		s.scrollHeight = e.scrollHeight;
-		s.clientWidth = e.clientWidth;
-		s.scrollWidth = e.scrollWidth;
-		checkEnd(e);
+		update(e);
 	};
-	y._init = function (e) {
-		check(e);
+	window.stopOverscrollEvent = function (e) {
+		check(e, 'stopOverscrollEvent');
 		delete e[sym];
-		e.removeEventListener('scroll', scroll);
+		e.removeEventListener('touchstart', touchstart);
 		e.removeEventListener('touchmove', touchmove);
-		e.removeEventListener('touchend', touchend);
+	};
+	window.firesOverscrollEvent = function (e) {
+		check(e, 'firesOverscrollEvent');
+		return sym in e;
 	};
 })();

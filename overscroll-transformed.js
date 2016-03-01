@@ -4,8 +4,8 @@
 	'use strict';
 
 	if ('getOverscrollEvent' in window) return;
-	var des = '_overscrollEventProperties',
-	    sym = 'Symbol' in window ? Symbol(des) : des;
+	var des = 'overscrollEventProperties',
+	    sym = 'Symbol' in window ? Symbol(des) : '_' + des;
 	var positiveOnly = function positiveOnly(e) {
 		return Math.max(e, 0);
 	};

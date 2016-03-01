@@ -1,8 +1,8 @@
 (() => {
 	'use strict';
 	if ('getOverscrollEvent' in window) return;
-	const des = '_overscrollEventProperties',
-				sym = 'Symbol' in window ? Symbol(des) : des;
+	const des = 'overscrollEventProperties',
+				sym = 'Symbol' in window ? Symbol(des) : `_${des}`;
 	const positiveOnly = e => Math.max(e, 0);
 	const check = (e, f) => {
 		if (!e || e.nodeType !== 1) throw new TypeError(`Failed to execute '${f}' with '${e}': parameter 1 should be a node with nodeType equal to 1`);

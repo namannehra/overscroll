@@ -78,6 +78,7 @@
 	<p>Try to scroll down using touch</p>
 </div>
 <script>
+	'use strict';
 	var d = document.querySelector('#d'),
 			eleTop = document.querySelector('#top'),
 			eleBottom = document.querySelector('#bottom');
@@ -89,7 +90,7 @@
 		eleTop.style.transform = 'translateY(' + Math.min(top / 3, 128) + 'px)';
 		eleBottom.style.transform = 'translateY(-' + Math.min(bottom / 3, 128) + 'px)';
 		if (top > 0 || bottom > 0) {
-			det.touchmoveEvent.preventDefault();
+			det.sourceEvent.preventDefault();
 		}
 	});
 </script>

@@ -31,8 +31,8 @@
 		    scrollTop = this.scrollTop,
 		    scrollLeft = this.scrollLeft,
 		    atTop = scrollTop === 0,
-		    atBottom = scrollTop + s.height === s.scrollHeight,
 		    atLeft = scrollLeft === 0,
+		    atBottom = scrollTop + s.height === s.scrollHeight,
 		    atRight = scrollLeft + s.width === s.scrollWidth;
 		var top = 0,
 		    right = 0,

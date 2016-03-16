@@ -3,16 +3,26 @@ JavaScript functions for listening to `overscroll` events on touch devices.
 
 [Example](https://namannehra.github.io/overscroll/)
 
+## Setup
 Load the file using script tag in head
 
 	<script src="overscroll-transformed.js"></script>
 
-Call `getOverscrollEvent` and pass an element as argumenmt
+## Use
+Call `OverscrollEvent.start` and pass an element as argumenmt
 
 	var d = document.querySelector('#d');
-	getOverscrollEvent(d);
+	OverscrollEvent.start(d);
 
-Now this element will fire overscroll events. Listen using addEventListener. The `detail` of event has 5 properties. `top`, `right`, `bottom` and `left` are the respective overflow in pixel. If there is no overflow then their value is `0`. The 5th property is `sourceEvent`. It is the original `touchmove` event which is used to calculate overflow. You may call `preventDefault` on `touchmove` event to stop scrolling.
+Now this element will fire `overscroll` events. Listen using addEventListener. The `detail` of event has following properties:
+
+| Property | Type | Description |
+| --- | --- | --- |
+| top | Number | top overscroll |
+| right | Number | right overscroll |
+| bottom | Number | bottom overscroll |
+| left | Number | left overscroll |
+| sourceEvent | Object | Original Touch Event which is used it calculate `overscroll` |
 
 	d.addEventListener(`overscroll`, function(e) {
 		var det = e.detail;
@@ -20,14 +30,18 @@ Now this element will fire overscroll events. Listen using addEventListener. The
 		console.log('overscroll top is ', top);
 	});
 
-Call `stopOverscrollEvent` when you don't need the element to fire overscroll event as this event is has heavy on scrolling performance
+Call `OverscrollEvent.stop` when you don't need the element to fire `overscroll` event as `overscroll` events are heavy on scrolling performance
 
-	stopOverscrollEvent(d);
+	OverscrollEvent.stop(d);
 
-`firesOverscrollEvent` can be used to check if an element is firing overscroll events.
+`OverscrollEvent.fires` can be used to check if an element is firing `overscroll` events.
 
-	firesOverscrollEvent(d); //true
-
-**Note:** Height and width of element is calculate when user touches the element. If size of element changes while user is touhing then call `getOverscrollEvent` again with same element as argumant to recalculate the reise.
+	OverscrollEvent.fires(d); //true
 
 `overscroll.js` is the original file and uses `const`, `let` and `arrow functions` which may not be supported in all browsers. `overscroll-transformed.js` is genetared using [babeljs](https://babeljs.io/) and will work in most browsers.
+
+## Notes
+* `overscroll` events only work in browsers which support Touch Events and fires Touch Events without CSS touch-action property (Currently only Chrome).
+* `top`, `right`, `bottom` and `left` properties only be present when there is `overscroll` in the perticular direction.
+* Height and width of element is calculate when user touches the element (using touchstart event). If size of element changes while user is touhing then call `OverscrollEvent.update` with the element as argumant to recalculate the size.
+* `preventDefault` can be called on `sourceEvent` property to prevent scrolling.

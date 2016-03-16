@@ -23,12 +23,16 @@
 		position: fixed;
 		right: 0;
 		left: 0;
+		will-change: transform;
 	}
 	#top {
 		top: -48px;
 	}
 	#bottom {
 		bottom: -48px;
+	}
+	.animate {
+		transition: transform 0.2s
 	}
 </style>
 <div id="top"></div>
@@ -75,6 +79,24 @@
 	<p>Some text</p>
 	<p>Some text</p>
 	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
+	<p>Some text</p>
 	<p>Try to scroll down using touch</p>
 </div>
 <script>
@@ -82,15 +104,29 @@
 	var d = document.querySelector('#d'),
 			eleTop = document.querySelector('#top'),
 			eleBottom = document.querySelector('#bottom');
-	getOverscrollEvent(d);
+	OverscrollEvent.start(d);
 	d.addEventListener('overscroll', function(e) {
 		var det = e.detail,
 				top = det.top,
 				bottom = det.bottom;
-		eleTop.style.transform = 'translateY(' + Math.min(top / 3, 128) + 'px)';
-		eleBottom.style.transform = 'translateY(-' + Math.min(bottom / 3, 128) + 'px)';
-		if (top > 0 || bottom > 0) {
+		if (top) {
+			eleTop.style.transform = 'translateY(' + Math.min(top / 3, 128) + 'px)';
+		}
+		if (bottom) {
+			eleBottom.style.transform = 'translateY(-' + Math.min(bottom / 3, 128) + 'px)';
+		}
+		if (top || bottom) {
 			det.sourceEvent.preventDefault();
 		}
+	});
+	d.addEventListener('touchstart', function() {
+		eleTop.classList.remove('animate');
+		eleBottom.classList.remove('animate');
+	});
+	d.addEventListener('touchend', function() {
+		eleTop.classList.add('animate');
+		eleBottom.classList.add('animate');
+		eleTop.style.transform = 'none';
+		eleBottom.style.transform = 'none';
 	});
 </script>

@@ -42,6 +42,6 @@ Call `OverscrollEvent.stop` when you don't need the element to fire `overscroll`
 
 ## Notes
 * `overscroll` events only work in browsers which support Touch Events and fires Touch Events without CSS touch-action property (Currently only Chrome).
-* `top`, `right`, `bottom` and `left` properties only be present when there is `overscroll` in the perticular direction.
+* `top`, `right`, `bottom` and `left` properties will be `0` when there is no `overscroll` in the perticular direction.
 * Height and width of element is calculate when user touches the element (using touchstart event). If size of element changes while user is touhing then call `OverscrollEvent.update` with the element as argumant to recalculate the size.
 * `preventDefault` can be called on `sourceEvent` property to prevent scrolling.

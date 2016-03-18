@@ -3,9 +3,8 @@
 	if ('OverscrollEvent' in window) return;
 	const propString = '_OverscrollEventProperties';
 	const check = (e, f) => {
-		if (!e || e.nodeType !== 1) throw new TypeError(`Failed to execute '${f}' on 'OverscrollEvent': The callback provided as parameter 1 is not a node with nodeType 1`);
+		if (!e || e.nodeType !== 1) throw new TypeError(`Failed to execute '${f}': The callback provided as parameter 1 is not a node with nodeType 1`);
 	};
-	const positiveOnly = e => Math.max(e, 0);
 	const getScroll = e => {
 		const prop = e[propString];
 		prop.scrollTop = e.scrollTop;
@@ -35,39 +34,36 @@
 					atLeft = prop.scrollLeft === 0,
 					atBottom = prop.scrollTop + prop.height === prop.scrollHeight,
 					atRight = prop.scrollLeft + prop.width === prop.scrollWidth,
-					verEnd = atTop || atBottom,
-					horEnd = atLeft || atRight;
-		if (!verEnd && !horEnd) return;
-		const det = {},
-					touch = e.touches[0];
-		let top = 0,
-				bottom = 0,
-				left = 0,
-				right = 0;
-		if (verEnd) {
+					touch = e.touches[0],
+					det = {
+						top: 0,
+						right: 0,
+						bottom: 0,
+						left: 0,
+						sourceEvent: e
+					};
+		if (atTop || atBottom) {
 			const y = touch.clientY,
 						startY = prop.startY;
 			if (startY === undefined) prop.startY = y;
 			else {
-				top = positiveOnly(y - startY);
-				bottom = positiveOnly(startY - y);
-				if (atTop && top !== 0) det.top = top;
-				if (atBottom && bottom !== 0) det.bottom = bottom;
+				const top = y - startY,
+							bottom = -top;
+				if (atTop && top > 0) det.top = top;
+				if (atBottom && bottom > 0) det.bottom = bottom;
 			}
 		}
-		if (horEnd) {
+		if (atLeft || atRight) {
 			const x = touch.clientX,
 						startX = prop.startX;
 			if (startX === undefined) prop.startX = x;
 			else {
-				left = positiveOnly(x - startX);
-				right = positiveOnly(startX - x);
-				if (atLeft && left !== 0) det.left = left;
-				if (atRight && right !== 0) det.right = right;
+				const left = x - startX,
+							right = -left;
+				if (atLeft && left > 0) det.left = left;
+				if (atRight && right > 0) det.right = left;
 			}
 		}
-		if (top === 0 && bottom === 0 && left === 0 && right === 0) return;
-		det.sourceEvent = e;
 		this.dispatchEvent(new CustomEvent('overscroll', {
 			detail: det
 		}));

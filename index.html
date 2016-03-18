@@ -109,13 +109,9 @@
 		var det = e.detail,
 				top = det.top,
 				bottom = det.bottom;
-		if (top) {
-			eleTop.style.transform = 'translateY(' + Math.min(top / 3, 128) + 'px)';
-		}
-		if (bottom) {
-			eleBottom.style.transform = 'translateY(-' + Math.min(bottom / 3, 128) + 'px)';
-		}
-		if (top || bottom) {
+		eleTop.style.transform = 'translateY(' + Math.min(top / 3, 128) + 'px)';
+		eleBottom.style.transform = 'translateY(-' + Math.min(bottom / 3, 128) + 'px)';
+		if (top > 0 || bottom > 0) {
 			det.sourceEvent.preventDefault();
 		}
 	});

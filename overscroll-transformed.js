@@ -1,8 +1,5 @@
-'use strict';
-
 (function () {
 	'use strict';
-
 	if ('OverscrollEvent' in window) return;
 	var propString = '_OverscrollEventProperties';
 	var check = function check(e, f) {

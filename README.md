@@ -24,10 +24,10 @@ Now this element will fire `overscroll` events. Listen using addEventListener. T
 | left | Number | left overscroll |
 | sourceEvent | Object | Original Touch Event which is used it calculate `overscroll` |
 
-	d.addEventListener(`overscroll`, function(e) {
+	d.addEventListener('overscroll', function(e) {
 		var det = e.detail;
 		var top = det.top;
-		console.log('overscroll top is ', top);
+		console.log('overscroll top is ' + top);
 	});
 
 Call `OverscrollEvent.stop` when you don't need the element to fire `overscroll` event as `overscroll` events are heavy on scrolling performance
